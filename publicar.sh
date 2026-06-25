@@ -21,6 +21,6 @@ ssh "$SERVER" "mkdir -p $REMOTE_DIR/$BATCH_DIR"
 scp "${archivos[@]}" "$SERVER:$REMOTE_DIR/$BATCH_DIR/"
 
 echo "Importando en producción..."
-ssh "$SERVER" "cd $REMOTE_DIR && python3 importar.py"
+ssh "$SERVER" "cd $REMOTE_DIR && source .venv/bin/activate && python importar.py"
 
 echo "Listo."
