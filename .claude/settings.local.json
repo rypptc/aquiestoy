@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "aquiestoy": {
+      "command": "ssh",
+      "args": ["root@172.238.220.84", "cd /var/www/aquiestoy && .venv/bin/python mcp_server.py"]
+    }
+  }
+}

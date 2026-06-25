@@ -3,10 +3,13 @@ from models import Persona
 
 public_bp = Blueprint("public", __name__)
 
+PER_PAGE = 30
+
 
 @public_bp.route("/")
 def index():
     q = request.args.get("q", "").strip()
+    page = request.args.get("page", 1, type=int)
 
     personas = Persona.query
 
@@ -18,9 +21,10 @@ def index():
             Persona.notas.ilike(like)
         )
 
-    personas = personas.order_by(Persona.apellido, Persona.nombre).all()
+    personas = personas.order_by(Persona.apellido, Persona.nombre)
+    paginacion = personas.paginate(page=page, per_page=PER_PAGE, error_out=False)
 
-    return render_template("index.html", personas=personas, q=q)
+    return render_template("index.html", paginacion=paginacion, q=q)
 
 
 @public_bp.route("/persona/<int:persona_id>")
