@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Aquí Estoy{% endblock %}
+
+{% block content %}
+<div class="search-hero">
+  <div class="container">
+    <h1 class="mb-1">Aquí Estoy</h1>
+    <p class="lead mb-4">Busca a tu familiar reportado durante el terremoto</p>
+    <form method="GET" action="{{ url_for('public.index') }}">
+      <div class="row g-2">
+        <div class="col-md-10">
+          <input type="text" name="q" class="form-control form-control-lg"
+                 placeholder="Nombre, apellido, zona, hospital..." value="{{ q }}" autofocus>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-warning btn-lg w-100" type="submit">
+            <i class="bi bi-search"></i> Buscar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="container mt-4">
+  {% if personas %}
+    <p class="text-muted mb-3">{{ personas|length }} persona(s) encontrada(s)</p>
+    <div class="row g-3">
+      {% for p in personas %}
+        <div class="col-md-6 col-lg-4">
+          <a href="{{ url_for('public.persona', persona_id=p.id) }}" class="text-decoration-none text-dark">
+            <div class="card h-100 shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title mb-1">{{ p.nombre_completo }}</h5>
+                {% if p.notas %}
+                  <p class="text-muted small mb-0 mt-1">{{ p.notas }}</p>
+                {% endif %}
+              </div>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  {% elif request.args %}
+    <div class="text-center py-5 text-muted">
+      <i class="bi bi-search fs-1"></i>
+      <p class="mt-3">No se encontraron resultados. Intenta con otro término.</p>
+    </div>
+  {% else %}
+    <div class="text-center py-5 text-muted">
+      <i class="bi bi-people fs-1"></i>
+      <p class="mt-3">Ingresa un nombre o cualquier dato para buscar.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

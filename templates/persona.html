@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{{ persona.nombre_completo }} — Aquí Estoy{% endblock %}
+
+{% block content %}
+<div class="container mt-4" style="max-width: 680px">
+  <a href="{{ url_for('public.index') }}" class="btn btn-sm btn-outline-secondary mb-3">
+    <i class="bi bi-arrow-left"></i> Volver
+  </a>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h2 class="h3 mb-3">{{ persona.nombre_completo }}</h2>
+
+      {% if persona.notas %}
+        <p class="mb-3">{{ persona.notas }}</p>
+      {% endif %}
+
+      <small class="text-muted">Registrado el {{ persona.created_at.strftime('%d/%m/%Y') }}</small>
+    </div>
+  </div>
+
+  {% if persona.fuentes %}
+    <h6 class="mt-4 mb-2 text-muted text-uppercase" style="font-size:.75rem;letter-spacing:.05em">Fuentes</h6>
+    {% for f in persona.fuentes %}
+      <div class="card mb-2">
+        <div class="card-body">
+          {% if f.imagen_path %}
+            <img src="{{ url_for('static', filename='uploads/' + f.imagen_path) }}"
+                 class="img-fluid rounded mb-2" alt="Imagen fuente">
+          {% endif %}
+          {% if f.descripcion %}
+            <p class="mb-1 small">{{ f.descripcion }}</p>
+          {% endif %}
+          {% if f.url %}
+            <a href="{{ f.url }}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary">
+              <i class="bi bi-link-45deg"></i> Ver fuente original
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
+</div>
+{% endblock %}
