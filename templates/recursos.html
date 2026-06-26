@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; margin: 40px auto;">
+  <h1>Otros Recursos</h1>
+  <p>Sitios donde puedes buscar información sobre personas reportadas:</p>
+  
+  <ul style="list-style: none; padding: 0;">
+    {% for recurso in recursos %}
+    <li style="margin: 20px 0; padding: 15px; border-left: 4px solid #007bff;">
+      <a href="{{ recurso.url }}" target="_blank" style="font-size: 18px; text-decoration: none; color: #007bff;">
+        {{ recurso.nombre }}
+      </a>
+      {% if recurso.descripcion %}
+        <p style="margin: 5px 0; color: #666; font-size: 14px;">{{ recurso.descripcion }}</p>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

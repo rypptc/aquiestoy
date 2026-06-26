@@ -31,3 +31,22 @@ def index():
 def persona(persona_id):
     p = Persona.query.get_or_404(persona_id)
     return render_template("persona.html", persona=p)
+
+
+RECURSOS = [
+    {
+        'nombre': 'Aquí Estoy',
+        'url': 'https://aquiestoy.xyz',
+        'descripcion': 'Base de datos consolidada'
+    },
+    {
+        'nombre': 'API Aquí Estoy',
+        'url': 'https://aquiestoy.xyz/api',
+        'descripcion': 'Acceso programático a los datos'
+    },
+]
+
+
+@public_bp.route("/recursos")
+def recursos():
+    return render_template("recursos.html", recursos=RECURSOS)
