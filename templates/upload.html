@@ -36,21 +36,23 @@
   <ol>
     <li>Sube la imagen/captura a <strong>ChatGPT</strong></li>
     <li>Usa este prompt:
-      <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px; font-size: 12px;">Extrae los nombres de esta imagen en formato CSV con 3 columnas:
-nombre,apellido,notas
+      <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px; font-size: 12px;">Extrae los nombres de esta imagen en formato CSV con:
+nombre, apellido, [edad], [observaciones]
 
-En la columna "notas" incluye toda la información disponible:
-edad, sexo, ubicación, hospital, procedencia, o cualquier dato relevante.</pre>
+Incluye toda la información disponible en las columnas adicionales.</pre>
     </li>
     <li>Copia el CSV que ChatGPT genera</li>
-    <li>Guarda en archivo <strong>.csv</strong> (ej: personas.csv)</li>
+    <li>Guarda en archivo <strong>.csv</strong></li>
     <li>Sube aquí</li>
   </ol>
 
-  <h5 class="mt-4">Ejemplo de CSV correcto:</h5>
-  <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px; font-size: 12px;">nombre,apellido,notas
-Juan,García,"CI: 20003134 | Edad: 30 | Hospital: Pérez Carreño"
-Ana,Pérez,"Edad: 28 | La Guaira | Procedencia: Catia"
-Carlos,López,"Edad: 45"</pre>
+  <h5 class="mt-4">Formato aceptado:</h5>
+  <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px; font-size: 12px;">nombre,apellido,edad,observaciones
+Aaron,Villalta,8,"Sin familiar"
+Cesar,Chamero,8,
+Natalia,Romero,8,
+Maximiliano,Chirinos,6,</pre>
+
+  <p class="text-muted small mt-3">✓ Acepta cualquier formato con nombre + apellido + columnas adicionales</p>
 </div>
 {% endblock %}

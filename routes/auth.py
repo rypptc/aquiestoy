@@ -68,17 +68,17 @@ def upload():
         
         try:
             csv_content = csv_file.read().decode('utf-8')
-            
+
             # Validar CSV: debe tener al menos nombre y apellido
             reader = csv.DictReader(StringIO(csv_content))
             if not reader.fieldnames or 'nombre' not in reader.fieldnames or 'apellido' not in reader.fieldnames:
                 return render_template('upload.html', error='CSV debe tener columnas "nombre" y "apellido"'), 400
-            
+
             # Contar filas
             rows = list(reader)
             if not rows:
                 return render_template('upload.html', error='CSV está vacío'), 400
-            
+
         except Exception as e:
             return render_template('upload.html', error=f'Error al leer CSV: {str(e)}'), 400
         
@@ -109,10 +109,10 @@ def admin():
 def aprobar_submission(submission_id):
     # TODO: Verificar que es admin
     submission = Submission.query.get_or_404(submission_id)
-    
+
     # Parsear CSV e insertar en BD
     reader = csv.DictReader(StringIO(submission.csv_data))
-    
+
     # Crear fuente
     from models import Fuente, Persona
     fuente = Fuente(
@@ -121,13 +121,19 @@ def aprobar_submission(submission_id):
     )
     db.session.add(fuente)
     db.session.flush()
-    
+
     # Crear personas
     for row in reader:
         nombre = row.get('nombre', '').strip()
         apellido = row.get('apellido', '').strip()
-        notas = row.get('texto', '').strip() if 'texto' in row else ''
-        
+
+        # Tomar todas las columnas excepto nombre y apellido como notas
+        notas_parts = []
+        for col in reader.fieldnames:
+            if col not in ['nombre', 'apellido'] and row.get(col, '').strip():
+                notas_parts.append(row[col].strip())
+        notas = ' | '.join(notas_parts) if notas_parts else ''
+
         if nombre and apellido:
             persona = Persona(
                 nombre=nombre,
@@ -137,10 +143,10 @@ def aprobar_submission(submission_id):
             db.session.add(persona)
             db.session.flush()
             persona.fuentes.append(fuente)
-    
+
     submission.estado = 'aprobado'
     db.session.commit()
-    
+
     return redirect(url_for('auth.admin'))
 
 
