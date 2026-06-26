@@ -14,10 +14,7 @@ Base de datos pública de personas reportadas. Sin autenticación requerida.
 GET /personas/export?formato=json
 ```
 
-**Ejemplo:**
-```bash
-curl "https://aquiestoy.xyz/api/personas/export?formato=json" > personas.json
-```
+> ⚠️ **Acceso restringido** — Solo disponible para IPs autorizadas. Contacta al equipo para solicitar acceso.
 
 **Respuesta:**
 ```json
@@ -155,8 +152,8 @@ const resultados = await res2.json();
 ## Notas
 
 ⚠️ **Datos no verificados** — Consolidados de reportes en redes sociales  
-⚠️ **Sin rate limiting** — Úsalo responsablemente  
-⚠️ **Público** — No requiere autenticación  
+⚠️ **Búsqueda pública** — `/buscar` y `/stats` no requieren autenticación  
+⚠️ **Export restringido** — `/export` solo para IPs autorizadas (403 si no autorizado)  
 
 ---
 
