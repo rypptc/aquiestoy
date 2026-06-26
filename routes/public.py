@@ -35,16 +35,6 @@ def persona(persona_id):
 
 RECURSOS = [
     {
-        'nombre': 'Aquí Estoy',
-        'url': 'https://aquiestoy.xyz',
-        'descripcion': 'Base de datos consolidada'
-    },
-    {
-        'nombre': 'API Aquí Estoy',
-        'url': 'https://aquiestoy.xyz/api',
-        'descripcion': 'Acceso programático a los datos'
-    },
-    {
         'nombre': 'Desaparecidos Terremoto Venezuela',
         'url': 'https://desaparecidosterremotovenezuela.com/',
         'descripcion': None
