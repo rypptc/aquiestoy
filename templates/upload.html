@@ -3,56 +3,44 @@
 {% block content %}
 <div class="container" style="max-width: 600px; margin: 50px auto;">
   <h2>Subir datos</h2>
-  
+
   {% if error %}
     <div class="alert alert-danger">{{ error }}</div>
   {% endif %}
-  
+
   <form method="POST" enctype="multipart/form-data">
     <div class="mb-3">
       <label class="form-label">URL de la fuente (Tweet, Instagram, etc)</label>
       <input type="url" name="fuente_url" class="form-control" placeholder="https://x.com/..." required>
     </div>
-    
+
     <div class="mb-3">
       <label class="form-label">Descripción (opcional)</label>
-      <textarea name="descripcion" class="form-control" rows="3" placeholder="Ej: Lista de personas en Hospital Pérez Carreño"></textarea>
+      <textarea name="descripcion" class="form-control" rows="2" placeholder="Ej: Lista de Hospital Pérez Carreño"></textarea>
     </div>
-    
+
     <div class="mb-3">
       <label class="form-label">Archivo CSV</label>
       <input type="file" name="csv_file" class="form-control" accept=".csv" required>
-      <small class="text-muted">
-        Formato: nombre, apellido, [texto]
-      </small>
     </div>
-    
+
     <button type="submit" class="btn btn-primary">Subir datos</button>
     <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary">Salir</a>
   </form>
-  
-  <hr>
-  <h5>¿Cómo obtener el CSV?</h5>
-  <ol>
-    <li>Sube la imagen/captura a <strong>ChatGPT</strong></li>
-    <li>Usa este prompt:
-      <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px; font-size: 12px;">Extrae los nombres de esta imagen en formato CSV con:
-nombre, apellido, [edad], [observaciones]
 
-Incluye toda la información disponible en las columnas adicionales.</pre>
-    </li>
-    <li>Copia el CSV que ChatGPT genera</li>
-    <li>Guarda en archivo <strong>.csv</strong></li>
+  <hr>
+  <h5>Formato del CSV:</h5>
+  <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px;">nombre,apellido,notas
+Juan,García,CI: 20003134 | Edad: 30 | Hospital: Pérez Carreño
+Ana,Pérez,Edad: 28 | La Guaira</pre>
+
+  <h5 class="mt-4">Cómo obtenerlo:</h5>
+  <ol>
+    <li>Sube la imagen a ChatGPT</li>
+    <li>Pídele: <strong>"Extrae en CSV: nombre,apellido,notas"</strong></li>
+    <li>Copia el resultado</li>
+    <li>Guarda como .csv</li>
     <li>Sube aquí</li>
   </ol>
-
-  <h5 class="mt-4">Formato aceptado:</h5>
-  <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px; font-size: 12px;">nombre,apellido,edad,observaciones
-Aaron,Villalta,8,"Sin familiar"
-Cesar,Chamero,8,
-Natalia,Romero,8,
-Maximiliano,Chirinos,6,</pre>
-
-  <p class="text-muted small mt-3">✓ Acepta cualquier formato con nombre + apellido + columnas adicionales</p>
 </div>
 {% endblock %}
