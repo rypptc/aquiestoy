@@ -35,6 +35,29 @@
 
 <div class="container mt-4">
   <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="text-center p-3" style="background: #f8f9fa; border-radius: 5px;">
+        <div style="font-size: 1.5rem; font-weight: 700; color: #007bff;">{{ paginacion.total }}</div>
+        <p class="text-muted small mb-0">Personas en BD</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="text-center p-3" style="background: #f8f9fa; border-radius: 5px;">
+        <div style="font-size: 1.5rem; font-weight: 700; color: #28a745;">9</div>
+        <p class="text-muted small mb-0">Sitios colaboradores</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <a href="{{ url_for('public.stats_page') }}" class="text-decoration-none">
+        <div class="text-center p-3" style="background: #f8f9fa; border-radius: 5px; cursor: pointer;">
+          <div style="font-size: 1.5rem; font-weight: 700; color: #ffc107;">📊</div>
+          <p class="text-muted small mb-0">Ver estadísticas</p>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4">
     <div class="col-md-6">
       <a href="{{ url_for('auth.register') }}" class="text-decoration-none">
         <div class="card border-1" style="border-color: #dee2e6;">
