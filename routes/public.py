@@ -49,6 +49,11 @@ RECURSOS = [
         'url': 'https://venezuelatebusca.com/',
         'descripcion': None
     },
+    {
+        'nombre': 'Hospitales en Venezuela',
+        'url': 'https://hospitalesenvenezuela.com/',
+        'descripcion': None
+    },
 ]
 
 
