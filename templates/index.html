@@ -3,18 +3,28 @@
 
 {% block content %}
 <div class="search-hero">
-  <div class="container">
-    <h1 class="mb-2">Aquí Estoy</h1>
-    <p class="mb-3" style="color: #e0e0e0; font-size: 0.95rem;">Base de datos de personas reportadas en hospitales de Venezuela</p>
-    <p class="lead mb-4">Busca a tu familiar reportado durante el terremoto de junio de 2026</p>
-    <form method="GET" action="{{ url_for('public.index') }}">
+  <div class="container py-5">
+    <div style="max-width: 800px;">
+      <p style="color: #ffc107; font-weight: 600; font-size: 0.9rem; letter-spacing: 0.05em; margin-bottom: 0.5rem; text-transform: uppercase;">
+        Base de datos de Venezuela
+      </p>
+      <h1 style="font-size: 3.5rem; font-weight: 700; line-height: 1.1; margin-bottom: 1rem; letter-spacing: -0.02em;">
+        Aquí Estoy
+      </h1>
+      <p style="font-size: 1.25rem; color: #e8e8e8; margin-bottom: 2rem; line-height: 1.6; max-width: 600px;">
+        Personas reportadas en hospitales de Venezuela durante el terremoto de junio de 2026. Busca a tu familiar.
+      </p>
+    </div>
+
+    <form method="GET" action="{{ url_for('public.index') }}" style="max-width: 700px;">
       <div class="row g-2">
         <div class="col-md-10">
           <input type="text" name="q" class="form-control form-control-lg"
-                 placeholder="Nombre, apellido, zona, hospital..." value="{{ q }}" autofocus>
+                 placeholder="Nombre, apellido, zona, hospital..." value="{{ q }}" autofocus
+                 style="font-size: 1rem; padding: 0.75rem 1rem;">
         </div>
         <div class="col-md-2">
-          <button class="btn btn-warning btn-lg w-100" type="submit">
+          <button class="btn btn-warning btn-lg w-100" type="submit" style="font-weight: 600;">
             <i class="bi bi-search"></i> Buscar
           </button>
         </div>
