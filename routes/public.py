@@ -133,6 +133,11 @@ RECURSOS = [
         'url': 'https://terremotovzla-hospitales.click/',
         'descripcion': None
     },
+    {
+        'nombre': 'Rescata Venezuela',
+        'url': 'https://www.rescatavenezuela.com/',
+        'descripcion': None
+    },
 ]
 
 
