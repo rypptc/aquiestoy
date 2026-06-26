@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, request
 from models import Persona
 import unicodedata
-from rapidfuzz import fuzz
 
 public_bp = Blueprint("public", __name__)
 
@@ -14,22 +13,6 @@ def normalize(text):
     nfd = unicodedata.normalize('NFD', text.lower())
     return ''.join(char for char in nfd if unicodedata.category(char) != 'Mn')
 
-def fuzzy_match(query, text, threshold=92):
-    """Check if query matches text with fuzzy matching"""
-    from rapidfuzz import distance
-    norm_query = normalize(query)
-    norm_text = normalize(text)
-
-    # For exact substring match, that's always valid
-    if norm_query in norm_text or norm_text in norm_query:
-        return True
-
-    # Levenshtein distance - very strict
-    lev_distance = distance.Levenshtein.distance(norm_query, norm_text)
-    max_distance = 1  # Only allow 1 character difference
-
-    return lev_distance <= max_distance
-
 @public_bp.route("/")
 def index():
     q = request.args.get("q", "").strip()
@@ -40,14 +23,15 @@ def index():
 
     if q:
         palabras = q.split()
+        norm_palabras = [normalize(p) for p in palabras]
 
         for persona in personas:
             matches = True
-            for palabra in palabras:
-                # Only search in nombre and apellido with fuzzy matching
+            for norm_palabra in norm_palabras:
+                # Exact match on normalized nombre/apellido
                 palabra_match = (
-                    fuzzy_match(palabra, persona.nombre) or
-                    fuzzy_match(palabra, persona.apellido)
+                    norm_palabra in normalize(persona.nombre) or
+                    norm_palabra in normalize(persona.apellido)
                 )
 
                 if not palabra_match:
