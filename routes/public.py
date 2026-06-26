@@ -59,6 +59,26 @@ RECURSOS = [
         'url': 'https://terremotove.netlify.app/',
         'descripcion': None
     },
+    {
+        'nombre': 'Enlaza Venezuela',
+        'url': 'https://www.enlazavenezuela.com/',
+        'descripcion': None
+    },
+    {
+        'nombre': 'SOS La Guaira',
+        'url': 'https://soslaguaira.lat/',
+        'descripcion': None
+    },
+    {
+        'nombre': 'Venezuela Reporta',
+        'url': 'https://venezuelareporta.org/',
+        'descripcion': None
+    },
+    {
+        'nombre': 'Terremoto VZLA Hospitales',
+        'url': 'https://terremotovzla-hospitales.click/',
+        'descripcion': None
+    },
 ]
 
 
