@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+  <div class="mb-5">
+    <h1>Estadísticas</h1>
+    <p class="text-muted">Estado actual de la base de datos</p>
+  </div>
+
+  <div class="row g-4">
+    <!-- Total de personas -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <div style="font-size: 2.5rem; font-weight: 700; color: #007bff; margin-bottom: 0.5rem;">
+            {{ "{:,}".format(stats.total_personas) }}
+          </div>
+          <p class="text-muted mb-0">Personas registradas</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fuentes -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <div style="font-size: 2.5rem; font-weight: 700; color: #28a745; margin-bottom: 0.5rem;">
+            {{ "{:,}".format(stats.total_fuentes) }}
+          </div>
+          <p class="text-muted mb-0">Fuentes agregadas</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nuevas hoy -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <div style="font-size: 2.5rem; font-weight: 700; color: #ffc107; margin-bottom: 0.5rem;">
+            {{ "{:,}".format(stats.nuevas_hoy) }}
+          </div>
+          <p class="text-muted mb-0">Añadidas hoy</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Búsquedas -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <div style="font-size: 2.5rem; font-weight: 700; color: #dc3545; margin-bottom: 0.5rem;">
+            {{ "{:,}".format(stats.total_searches) }}
+          </div>
+          <p class="text-muted mb-0">Búsquedas realizadas</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resumen semanal -->
+  <div class="row mt-5">
+    <div class="col-md-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title fw-bold mb-3">Resumen Semanal</h5>
+          <div class="row">
+            <div class="col-md-6">
+              <p class="text-muted mb-1">Personas añadidas esta semana</p>
+              <p style="font-size: 1.5rem; font-weight: 700;">{{ "{:,}".format(stats.nuevas_semana) }}</p>
+            </div>
+            <div class="col-md-6">
+              <p class="text-muted mb-1">Total en base de datos</p>
+              <p style="font-size: 1.5rem; font-weight: 700;">{{ "{:,}".format(stats.total_personas) }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nota de privacidad -->
+  <div class="alert alert-info mt-5" role="alert">
+    <small>
+      <strong>Nota:</strong> Estas estadísticas muestran números agregados. No se registran ni se exponen nombres de personas buscadas.
+      Los datos están anonimizados para proteger la privacidad.
+    </small>
+  </div>
+</div>
+{% endblock %}

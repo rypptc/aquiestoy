@@ -147,24 +147,40 @@ def recursos():
 
 
 @public_bp.route("/stats")
-def stats():
+def stats_page():
     from datetime import datetime, timedelta
     from sqlalchemy import func
 
+    # Estadísticas de datos
     total_personas = Persona.query.count()
     total_fuentes = Persona.query.join(Persona.fuentes).distinct().count()
 
-    # Personas añadidas hoy
     today = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
     new_today = Persona.query.filter(Persona.created_at >= today).count()
 
-    # Personas añadidas esta semana
     week_ago = today - timedelta(days=7)
     new_week = Persona.query.filter(Persona.created_at >= week_ago).count()
 
-    return {
+    # Estadísticas de búsqueda (sin nombres)
+    import subprocess
+    try:
+        # Contar búsquedas (queries con "?q=")
+        result = subprocess.run(
+            ["grep", "-o", "?q=[^\\s]*", "/var/log/nginx/access.log"],
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+        searches = len(result.stdout.strip().split('\n')) if result.stdout.strip() else 0
+    except:
+        searches = 0
+
+    stats_data = {
         'total_personas': total_personas,
         'total_fuentes': total_fuentes,
         'nuevas_hoy': new_today,
         'nuevas_semana': new_week,
+        'total_searches': searches,
     }
+
+    return render_template('stats.html', stats=stats_data)
