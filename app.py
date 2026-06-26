@@ -9,17 +9,26 @@ def ofuscar_ci(text):
     if not text:
         return text
 
-    pattern = r'([VE])?[-.]?(\d{2})[-.]?\d{3}[-.]?\d{3}([-.]?\d{2})'
+    # Patrón flexible para CIs: 15831615, 15.831.615, 15-831-615, V-15831615, etc
+    pattern = r'([VE])?[-.]?(\d{2})[-.]?\d{3}[-.]?\d{3}|(\d{8})'
 
     def replace_func(match):
-        prefix = match.group(1) or ''
-        primeros = match.group(2)
-        ultimos = match.group(3)
+        # Caso 1: Con formato V-XXXXXXXX o 15.831.615
+        if match.group(1) or (match.group(2) and match.group(2)):
+            prefix = match.group(1) or ''
+            primeros = match.group(2)
+            # Extraer últimos 2 dígitos del match
+            full_match = match.group(0)
+            ultimos = full_match[-2:]
 
-        if prefix:
-            return f"{prefix}-{primeros}XXXX{ultimos}"
-        else:
-            return f"{primeros}XXXX{ultimos}"
+            if prefix:
+                return f"{prefix}-{primeros}XXXX{ultimos}"
+            else:
+                return f"{primeros}XXXX{ultimos}"
+        # Caso 2: 8 dígitos sin formato
+        elif match.group(3):
+            ci = match.group(3)
+            return f"{ci[:2]}XXXX{ci[-2:]}"
 
     return re.sub(pattern, replace_func, text, flags=re.IGNORECASE)
 
