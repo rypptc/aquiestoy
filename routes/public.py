@@ -146,6 +146,25 @@ def recursos():
     return render_template("recursos.html", recursos=RECURSOS)
 
 
+@public_bp.route("/muestra")
+def muestra():
+    """Random sample of 20 people for quality check"""
+    from sqlalchemy import func
+
+    sample = Persona.query.order_by(func.random()).limit(20).all()
+
+    data = []
+    for persona in sample:
+        item = {
+            'nombre_completo': persona.nombre_completo,
+            'notas': persona.notas,
+            'fuentes': [{'url': f.url, 'descripcion': f.descripcion} for f in persona.fuentes]
+        }
+        data.append(item)
+
+    return render_template('muestra.html', sample=data, count=len(data))
+
+
 @public_bp.route("/stats")
 def stats_page():
     from datetime import datetime, timedelta

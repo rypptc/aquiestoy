@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+  <div class="mb-5">
+    <h1>Muestra de Calidad de Datos</h1>
+    <p class="text-muted">{{ count }} personas seleccionadas aleatoriamente. Revisa los nombres contra las fuentes originales.</p>
+  </div>
+
+  <div class="row g-3">
+    {% for item in sample %}
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title fw-bold">{{ item.nombre_completo }}</h5>
+
+            {% if item.notas %}
+              <p class="small text-muted mb-3">{{ item.notas }}</p>
+            {% endif %}
+
+            {% if item.fuentes %}
+              <div class="border-top pt-3">
+                <p class="small fw-bold mb-2">Fuente(s):</p>
+                {% for fuente in item.fuentes %}
+                  <a href="{{ fuente.url }}" target="_blank" class="btn btn-sm btn-outline-primary w-100 mb-2">
+                    {% if fuente.descripcion %}
+                      {{ fuente.descripcion[:40] }}...
+                    {% else %}
+                      Ver en Twitter
+                    {% endif %}
+                  </a>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="mt-5 text-center">
+    <a href="{{ url_for('public.muestra') }}" class="btn btn-primary">↻ Otra muestra</a>
+  </div>
+</div>
+{% endblock %}
