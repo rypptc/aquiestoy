@@ -54,6 +54,11 @@ RECURSOS = [
         'url': 'https://hospitalesenvenezuela.com/',
         'descripcion': None
     },
+    {
+        'nombre': 'Terremoto VE',
+        'url': 'https://terremotove.netlify.app/',
+        'descripcion': None
+    },
 ]
 
 
