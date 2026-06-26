@@ -49,11 +49,11 @@ def create_app():
     db.init_app(app)
     app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-change-in-prod')
 
-    # Rate limiting
+    # Rate limiting (sin límite global)
     limiter = Limiter(
         app=app,
         key_func=get_remote_address,
-        default_limits=["200 per day", "50 per hour"]
+        default_limits=[]
     )
     app.limiter = limiter
 
