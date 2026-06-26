@@ -14,12 +14,14 @@ def index():
     personas = Persona.query
 
     if q:
-        like = f"%{q}%"
-        personas = personas.filter(
-            Persona.nombre.ilike(like) |
-            Persona.apellido.ilike(like) |
-            Persona.notas.ilike(like)
-        )
+        palabras = q.split()
+        for palabra in palabras:
+            like = f"%{palabra}%"
+            personas = personas.filter(
+                Persona.nombre.ilike(like) |
+                Persona.apellido.ilike(like) |
+                Persona.notas.ilike(like)
+            )
 
     personas = personas.order_by(Persona.apellido, Persona.nombre)
     paginacion = personas.paginate(page=page, per_page=PER_PAGE, error_out=False)
