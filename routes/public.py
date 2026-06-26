@@ -14,7 +14,7 @@ def normalize(text):
     nfd = unicodedata.normalize('NFD', text.lower())
     return ''.join(char for char in nfd if unicodedata.category(char) != 'Mn')
 
-def fuzzy_match(query, text, threshold=75):
+def fuzzy_match(query, text, threshold=85):
     """Check if query matches text with fuzzy matching"""
     score = fuzz.token_set_ratio(normalize(query), normalize(text))
     return score >= threshold
