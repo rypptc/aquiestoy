@@ -144,3 +144,27 @@ RECURSOS = [
 @public_bp.route("/recursos")
 def recursos():
     return render_template("recursos.html", recursos=RECURSOS)
+
+
+@public_bp.route("/stats")
+def stats():
+    from datetime import datetime, timedelta
+    from sqlalchemy import func
+
+    total_personas = Persona.query.count()
+    total_fuentes = Persona.query.join(Persona.fuentes).distinct().count()
+
+    # Personas añadidas hoy
+    today = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
+    new_today = Persona.query.filter(Persona.created_at >= today).count()
+
+    # Personas añadidas esta semana
+    week_ago = today - timedelta(days=7)
+    new_week = Persona.query.filter(Persona.created_at >= week_ago).count()
+
+    return {
+        'total_personas': total_personas,
+        'total_fuentes': total_fuentes,
+        'nuevas_hoy': new_today,
+        'nuevas_semana': new_week,
+    }
