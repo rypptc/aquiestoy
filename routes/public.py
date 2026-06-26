@@ -14,20 +14,21 @@ def normalize(text):
     nfd = unicodedata.normalize('NFD', text.lower())
     return ''.join(char for char in nfd if unicodedata.category(char) != 'Mn')
 
-def fuzzy_match(query, text, threshold=90):
+def fuzzy_match(query, text, threshold=92):
     """Check if query matches text with fuzzy matching"""
     from rapidfuzz import distance
     norm_query = normalize(query)
     norm_text = normalize(text)
 
-    # Use token_set_ratio for word reordering
-    ratio = fuzz.token_set_ratio(norm_query, norm_text)
+    # For exact substring match, that's always valid
+    if norm_query in norm_text or norm_text in norm_query:
+        return True
 
-    # But also check Levenshtein distance - max 2 edits per 5 chars
+    # Levenshtein distance - very strict
     lev_distance = distance.Levenshtein.distance(norm_query, norm_text)
-    max_distance = max(2, len(norm_query) // 3)  # Allow ~1-2 edits
+    max_distance = 1  # Only allow 1 character difference
 
-    return ratio >= threshold and lev_distance <= max_distance
+    return lev_distance <= max_distance
 
 @public_bp.route("/")
 def index():
