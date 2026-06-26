@@ -35,6 +35,11 @@ def persona(persona_id):
 
 RECURSOS = [
     {
+        'nombre': 'Terremoto Venezuela App',
+        'url': 'https://terremotovenezuela.app/',
+        'descripcion': None
+    },
+    {
         'nombre': 'Desaparecidos Terremoto Venezuela',
         'url': 'https://desaparecidosterremotovenezuela.com/',
         'descripcion': None
