@@ -44,12 +44,12 @@ def index():
         for persona in personas:
             matches = True
             for palabra in palabras:
-                # Check if palabra matches nombre, apellido or notas
+                # Only search in nombre and apellido with fuzzy matching
                 palabra_match = (
                     fuzzy_match(palabra, persona.nombre) or
-                    fuzzy_match(palabra, persona.apellido) or
-                    fuzzy_match(palabra, persona.notas or "")
+                    fuzzy_match(palabra, persona.apellido)
                 )
+
                 if not palabra_match:
                     matches = False
                     break
