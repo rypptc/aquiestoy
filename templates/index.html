@@ -91,7 +91,7 @@
               <div class="card-body">
                 <h5 class="card-title mb-1">{{ p.nombre_completo }}</h5>
                 {% if p.notas %}
-                  <p class="text-muted small mb-0 mt-1">{{ p.notas }}</p>
+                  <p class="text-muted small mb-0 mt-1">{{ p.notas | ofuscar_ci }}</p>
                 {% endif %}
               </div>
             </div>

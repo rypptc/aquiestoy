@@ -12,7 +12,7 @@
       <h2 class="h3 mb-3">{{ persona.nombre_completo }}</h2>
 
       {% if persona.notas %}
-        <p class="mb-3">{{ persona.notas }}</p>
+        <p class="mb-3">{{ persona.notas | ofuscar_ci }}</p>
       {% endif %}
 
       <small class="text-muted">Registrado el {{ persona.created_at.strftime('%d/%m/%Y') }}</small>
