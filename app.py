@@ -1,6 +1,8 @@
 import os
 import re
 from flask import Flask
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from extensions import db
 
 
@@ -46,6 +48,14 @@ def create_app():
 
     db.init_app(app)
     app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-change-in-prod')
+
+    # Rate limiting
+    limiter = Limiter(
+        app=app,
+        key_func=get_remote_address,
+        default_limits=["200 per day", "50 per hour"]
+    )
+    app.limiter = limiter
 
     # Agregar filtro Jinja2 para ofuscar CIs
     app.jinja_env.filters['ofuscar_ci'] = ofuscar_ci

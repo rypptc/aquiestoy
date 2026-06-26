@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, send_file
+from flask import Blueprint, request, jsonify, send_file, current_app
 from extensions import db
 from models import Persona, Fuente
 from io import StringIO
@@ -9,6 +9,7 @@ api_bp = Blueprint('api', __name__, url_prefix='/api')
 
 # GET /api/personas/buscar?q=juan
 @api_bp.route('/personas/buscar', methods=['GET'])
+@current_app.limiter.limit("100 per hour")
 def buscar_personas():
     """
     Busca personas por nombre o apellido.
@@ -50,6 +51,7 @@ def buscar_personas():
 
 # GET /api/personas/<id>
 @api_bp.route('/personas/<int:persona_id>', methods=['GET'])
+@current_app.limiter.limit("500 per hour")
 def obtener_persona(persona_id):
     """
     Obtiene detalle completo de una persona con TODAS sus fuentes.
@@ -78,6 +80,7 @@ def obtener_persona(persona_id):
 
 # GET /api/personas/export
 @api_bp.route('/personas/export', methods=['GET'])
+@current_app.limiter.limit("5 per day")
 def exportar_personas():
     """
     Exporta todas las personas en CSV.
