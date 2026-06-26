@@ -81,8 +81,14 @@ def obtener_persona(persona_id):
 def exportar_personas():
     """
     Exporta todas las personas en CSV.
-    Formato: nombre, apellido, notas, fuentes_urls
+    Solo autorizado para terremotovenezuela.app (200.50.233.147)
     """
+    AUTHORIZED_IPS = ['200.50.233.147']
+    client_ip = request.remote_addr
+
+    if client_ip not in AUTHORIZED_IPS:
+        return jsonify({'error': 'Acceso denegado - IP no autorizada'}), 403
+
     formato = request.args.get('formato', 'csv').lower()
     
     personas = Persona.query.all()
