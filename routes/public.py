@@ -44,6 +44,16 @@ RECURSOS = [
         'url': 'https://aquiestoy.xyz/api',
         'descripcion': 'Acceso programático a los datos'
     },
+    {
+        'nombre': 'Desaparecidos Terremoto Venezuela',
+        'url': 'https://desaparecidosterremotovenezuela.com/',
+        'descripcion': None
+    },
+    {
+        'nombre': 'Venezuela Te Busca',
+        'url': 'https://venezuelatebusca.com/',
+        'descripcion': None
+    },
 ]
 
 
