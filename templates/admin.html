@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="margin: 50px auto;">
+  <h2>Panel de administración</h2>
+  
+  <p>Submissions pendientes: <strong>{{ submissions|length }}</strong></p>
+  
+  {% if submissions %}
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Fuente</th>
+            <th>Descripción</th>
+            <th>Filas</th>
+            <th>Fecha</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for sub in submissions %}
+            <tr>
+              <td>{{ sub.user.email }}</td>
+              <td><a href="{{ sub.fuente_url }}" target="_blank">Ver</a></td>
+              <td>{{ sub.descripcion[:50] }}...</td>
+              <td>{{ sub.csv_data.count(chr(10)) }}</td>
+              <td>{{ sub.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+              <td>
+                <form method="POST" style="display: inline;">
+                  <button type="submit" formaction="{{ url_for('auth.aprobar_submission', submission_id=sub.id) }}" 
+                          class="btn btn-sm btn-success">✓ Aprobar</button>
+                  <button type="submit" formaction="{{ url_for('auth.rechazar_submission', submission_id=sub.id) }}" 
+                          class="btn btn-sm btn-danger">✗ Rechazar</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="text-muted">No hay submissions pendientes</p>
+  {% endif %}
+</div>
+{% endblock %}

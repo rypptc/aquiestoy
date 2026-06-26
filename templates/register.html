@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="max-width: 400px; margin: 50px auto;">
+  <h2>Registro</h2>
+  
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+  
+  <form method="POST">
+    <div class="mb-3">
+      <label class="form-label">Email</label>
+      <input type="email" name="email" class="form-control" required>
+    </div>
+    
+    <div class="mb-3">
+      <label class="form-label">Contraseña</label>
+      <input type="password" name="password" class="form-control" required>
+    </div>
+    
+    <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+  </form>
+  
+  <p class="text-center mt-3">
+    ¿Ya tienes cuenta? <a href="{{ url_for('auth.login') }}">Inicia sesión</a>
+  </p>
+</div>
+{% endblock %}

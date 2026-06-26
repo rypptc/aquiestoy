@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; margin: 50px auto; text-align: center;">
+  <h2>✓ Datos recibidos</h2>
+  <p>Subiste <strong>{{ filas }} personas</strong></p>
+  <p class="text-muted">Los datos están siendo revisados. Te notificaremos cuando se publiquen.</p>
+  
+  <a href="{{ url_for('auth.upload') }}" class="btn btn-primary mt-3">Subir más datos</a>
+</div>
+{% endblock %}

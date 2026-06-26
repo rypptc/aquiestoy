@@ -15,12 +15,15 @@ def create_app():
     app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16 MB
 
     db.init_app(app)
+    app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-change-in-prod')
 
     from routes.public import public_bp
     from routes.api import api_bp
+    from routes.auth import auth_bp
 
     app.register_blueprint(public_bp)
     app.register_blueprint(api_bp)
+    app.register_blueprint(auth_bp)
 
     with app.app_context():
         db.create_all()
