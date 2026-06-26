@@ -64,20 +64,22 @@ def index():
             self.total = total
             self.page = page
             self.per_page = per_page
-            self.pages = (total + per_page - 1) // per_page
+            self.pages = max(1, (total + per_page - 1) // per_page)
             self.has_prev = page > 1
             self.has_next = page < self.pages
             self.prev_num = page - 1 if self.has_prev else None
             self.next_num = page + 1 if self.has_next else None
 
         def iter_pages(self, left_edge=1, right_edge=1, left_current=2, right_current=2):
+            last = 0
             for num in range(1, self.pages + 1):
                 if (num <= left_edge or
                     (self.page - left_current <= num <= self.page + right_current) or
                     num > self.pages - right_edge):
+                    if last + 1 != num:
+                        yield None
                     yield num
-                else:
-                    yield None
+                    last = num
 
     paginacion = Paginator(items, total, page, per_page)
 
