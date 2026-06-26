@@ -1,47 +1,97 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container" style="margin: 50px auto;">
-  <h2>Panel de administración</h2>
-  
-  <p>Submissions pendientes: <strong>{{ submissions|length }}</strong></p>
-  
+<div class="container mt-5 mb-5">
+  <div class="mb-5">
+    <h1>Panel de Administración</h1>
+  </div>
+
+  <!-- Alert si hay pendientes -->
   {% if submissions %}
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Email</th>
-            <th>Fuente</th>
-            <th>Descripción</th>
-            <th>Filas</th>
-            <th>Fecha</th>
-            <th>Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for sub in submissions %}
-            <tr>
-              <td>{{ sub.user.email }}</td>
-              <td><a href="{{ sub.fuente_url }}" target="_blank">Ver</a></td>
-              <td>{{ sub.descripcion[:50] }}...</td>
-              <td>{{ sub.csv_data.count(chr(10)) }}</td>
-              <td>{{ sub.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
-              <td>
-                <form method="POST" style="display: inline;">
-                  <button type="submit" formaction="{{ url_for('auth.aprobar_submission', submission_id=sub.id) }}" 
-                          class="btn btn-sm btn-success">✓ Aprobar</button>
-                  <button type="submit" formaction="{{ url_for('auth.rechazar_submission', submission_id=sub.id) }}" 
-                          class="btn btn-sm btn-danger">✗ Rechazar</button>
-                </form>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>⚠️ {{ submissions|length }} submission(s) pendiente(s)</strong> de revisión
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  {% endif %}
+
+  <!-- Stats cards -->
+  <div class="row g-3 mb-5">
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <p class="text-muted small mb-1">Pendientes de revisión</p>
+          <div style="font-size: 2rem; font-weight: 700; color: #ffc107;">{{ submissions|length }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <p class="text-muted small mb-1">Personas a importar</p>
+          <div style="font-size: 2rem; font-weight: 700; color: #007bff;">
+            {% set total_rows = submissions|map(attribute='csv_data')|map('count', '\n')|sum %}
+            {{ total_rows }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if submissions %}
+    <div>
+      <h5 class="mb-3 fw-bold">Subidas pendientes</h5>
+      <div class="row g-3">
+        {% for sub in submissions %}
+          <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+              <div class="card-body d-flex flex-column">
+                <h6 class="card-title fw-bold mb-2">{{ sub.user.email }}</h6>
+
+                <div class="mb-3 flex-grow-1">
+                  {% set rows = sub.csv_data.count('\n') %}
+                  <p class="small text-muted mb-1">
+                    <strong>{{ rows }}</strong> persona(s)
+                  </p>
+
+                  {% if sub.fuente_url %}
+                    <p class="small text-muted mb-1">
+                      <strong>Fuente:</strong>
+                      <a href="{{ sub.fuente_url }}" target="_blank" class="text-primary">Ver</a>
+                    </p>
+                  {% endif %}
+
+                  {% if sub.descripcion %}
+                    <p class="small text-muted mb-0">
+                      {{ sub.descripcion[:80] }}{% if sub.descripcion|length > 80 %}...{% endif %}
+                    </p>
+                  {% endif %}
+                </div>
+
+                <p class="small text-muted mb-3 border-top pt-2">
+                  {{ sub.created_at.strftime('%d/%m/%Y %H:%M') }}
+                </p>
+
+                <div class="d-grid gap-2">
+                  <form method="POST">
+                    <button type="submit" formaction="{{ url_for('auth.aprobar_submission', submission_id=sub.id) }}"
+                            class="btn btn-sm btn-success fw-bold">✓ Aprobar</button>
+                  </form>
+                  <form method="POST">
+                    <button type="submit" formaction="{{ url_for('auth.rechazar_submission', submission_id=sub.id) }}"
+                            class="btn btn-sm btn-danger fw-bold">✗ Rechazar</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
     </div>
   {% else %}
-    <p class="text-muted">No hay submissions pendientes</p>
+    <div class="alert alert-success text-center py-5">
+      <h5 class="mb-2">✓ Sin pendientes</h5>
+      <p class="text-muted mb-0">No hay submissions esperando revisión</p>
+    </div>
   {% endif %}
 </div>
 {% endblock %}
