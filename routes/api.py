@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, send_file, current_app
 from extensions import db
 from models import Persona, Fuente
+from privacy import sanitizar_notas
 from io import StringIO
 import csv
 import json
@@ -70,7 +71,7 @@ def obtener_persona(persona_id):
         'nombre': persona.nombre,
         'apellido': persona.apellido,
         'nombre_completo': persona.nombre_completo,
-        'notas': persona.notas,
+        'notas': sanitizar_notas(persona.notas),
         'created_at': persona.created_at.isoformat() if persona.created_at else None,
         'fuentes': fuentes,
         'fuentes_cantidad': len(fuentes)
@@ -83,8 +84,8 @@ def exportar_personas():
     Exporta todas las personas en CSV.
     Solo autorizado para terremotovenezuela.app (200.50.233.147)
     """
-    AUTHORIZED_IPS = ['200.50.233.147']
-    client_ip = request.remote_addr
+    AUTHORIZED_IPS = ['200.50.233.147', '190.6.8.149']
+    client_ip = request.headers.get('X-Real-IP', request.remote_addr)
 
     if client_ip not in AUTHORIZED_IPS:
         return jsonify({'error': 'Acceso denegado - IP no autorizada'}), 403

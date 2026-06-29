@@ -15,7 +15,7 @@
             <h5 class="card-title fw-bold">{{ item.nombre_completo }}</h5>
 
             {% if item.notas %}
-              <p class="small text-muted mb-3">{{ item.notas | ofuscar_ci }}</p>
+              <p class="small text-muted mb-3">{{ item.notas | sanitizar }}</p>
             {% endif %}
 
             {% if item.fuentes %}

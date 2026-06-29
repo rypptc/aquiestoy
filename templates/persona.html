@@ -9,12 +9,54 @@
 
   <div class="card shadow-sm">
     <div class="card-body">
-      <h2 class="h3 mb-3">{{ persona.nombre_completo }}</h2>
+      <div class="d-flex justify-content-between align-items-start mb-2">
+        <h2 class="h3 mb-0">{{ persona.nombre_completo }}</h2>
+        {% if persona.status %}
+          <span class="badge {% if persona.status == 'Confirmado' %}bg-success{% else %}bg-warning text-dark{% endif %} ms-2">
+            {{ persona.status }}
+          </span>
+        {% endif %}
+      </div>
+
+      <div class="row g-2 mt-2">
+        {% if persona.hospital %}
+          <div class="col-12">
+            <small class="text-muted text-uppercase" style="font-size:.7rem;letter-spacing:.05em">Hospital</small>
+            <div class="fw-semibold">{{ persona.hospital }}</div>
+          </div>
+        {% endif %}
+        {% if persona.edad %}
+          <div class="col-6">
+            <small class="text-muted text-uppercase" style="font-size:.7rem;letter-spacing:.05em">Edad</small>
+            <div>{{ persona.edad }} años</div>
+          </div>
+        {% endif %}
+        {% if persona.sexo %}
+          <div class="col-6">
+            <small class="text-muted text-uppercase" style="font-size:.7rem;letter-spacing:.05em">Sexo</small>
+            <div>{{ persona.sexo }}</div>
+          </div>
+        {% endif %}
+        {% if persona.ci %}
+          <div class="col-6">
+            <small class="text-muted text-uppercase" style="font-size:.7rem;letter-spacing:.05em">Cédula</small>
+            <div>{{ persona.ci | ofuscar_ci }}</div>
+          </div>
+        {% endif %}
+        {% if persona.num_reportes and persona.num_reportes > 1 %}
+          <div class="col-6">
+            <small class="text-muted text-uppercase" style="font-size:.7rem;letter-spacing:.05em">Reportes</small>
+            <div>{{ persona.num_reportes }}</div>
+          </div>
+        {% endif %}
+      </div>
 
       {% if persona.notas %}
-        <p class="mb-3">{{ persona.notas | ofuscar_ci }}</p>
+        <hr class="my-3">
+        <p class="mb-0 small text-muted">{{ persona.notas | sanitizar }}</p>
       {% endif %}
 
+      <hr class="my-3">
       <small class="text-muted">Registrado el {{ persona.created_at.strftime('%d/%m/%Y') }}</small>
     </div>
   </div>
@@ -40,9 +82,13 @@
             <p class="mb-1 small">{{ f.descripcion }}</p>
           {% endif %}
           {% if f.url %}
-            <a href="{{ f.url }}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary">
-              <i class="bi bi-link-45deg"></i> Ver fuente original
-            </a>
+            {% if f.url.startswith('http') %}
+              <a href="{{ f.url }}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-link-45deg"></i> Ver fuente original
+              </a>
+            {% else %}
+              <span class="text-muted small">Fuente: colaboradores de la comunidad</span>
+            {% endif %}
           {% endif %}
         </div>
       </div>

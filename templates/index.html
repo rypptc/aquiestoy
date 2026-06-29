@@ -48,7 +48,7 @@
     <div class="col-md-4">
       <div class="text-center p-3" style="background: #f8f9fa; border-radius: 5px;">
         <div style="font-size: 1.5rem; font-weight: 700; color: #28a745;">9</div>
-        <p class="text-muted small mb-0">Sitios colaboradores</p>
+        <p class="text-muted small mb-0">Otros sitios</p>
       </div>
     </div>
     <div class="col-md-4">
@@ -95,7 +95,7 @@
               <div class="card-body">
                 <h5 class="card-title mb-1">{{ p.nombre_completo }}</h5>
                 {% if p.notas %}
-                  <p class="text-muted small mb-0 mt-1">{{ p.notas | ofuscar_ci }}</p>
+                  <p class="text-muted small mb-0 mt-1">{{ p.notas | sanitizar }}</p>
                 {% endif %}
               </div>
             </div>
