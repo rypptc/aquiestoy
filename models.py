@@ -12,11 +12,18 @@ persona_fuente = db.Table(
 class Persona(db.Model):
     __tablename__ = "persona"
 
-    id         = db.Column(db.Integer, primary_key=True)
-    nombre     = db.Column(db.String(100), nullable=False)
-    apellido   = db.Column(db.String(100), nullable=False)
-    notas      = db.Column(db.Text)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    id           = db.Column(db.Integer, primary_key=True)
+    nombre       = db.Column(db.String(100), nullable=False)
+    apellido     = db.Column(db.String(100), nullable=False)
+    ci           = db.Column(db.String(20))
+    edad         = db.Column(db.String(20))
+    sexo         = db.Column(db.String(10))
+    hospital     = db.Column(db.String(200))
+    status       = db.Column(db.String(30), default='Confirmado')
+    estado_salud = db.Column(db.String(30))
+    num_reportes = db.Column(db.Integer, default=1)
+    notas        = db.Column(db.Text)
+    created_at   = db.Column(db.DateTime, default=datetime.utcnow)
 
     fuentes = db.relationship("Fuente", secondary=persona_fuente, back_populates="personas")
 

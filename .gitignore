@@ -5,3 +5,6 @@ __pycache__/
 .env
 .tmp/
 static/uploads/
+backups/
+*.bak
+*.bak_*

@@ -2,60 +2,55 @@
 """
 Aquí Estoy MCP Server
 
-Corre en el servidor vía SSH stdio. Permite cargar personas y fuentes
-a la base de datos de producción desde cualquier conversación de Claude.
+Modo HTTP (producción):
+    python mcp_server.py --http
+    Claude Code se conecta vía SSH tunnel a http://localhost:8765/mcp
 
-Configuración en .claude/settings.local.json:
-    "mcpServers": {
-        "aquiestoy": {
-            "command": "ssh",
-            "args": ["root@172.238.220.84", "cd /var/www/aquiestoy && .venv/bin/python mcp_server.py"]
-        }
-    }
+Modo stdio (legacy/debug):
+    python mcp_server.py
 """
 
-import hashlib
 import json
 import sys
 import threading
 from functools import wraps
 from pathlib import Path
 
-# ---------------------------------------------------------------------------
-# Bootstrap Flask
-# ---------------------------------------------------------------------------
-
 BASE_DIR = Path(__file__).parent
 sys.path.insert(0, str(BASE_DIR))
 
-from dotenv import load_dotenv
-load_dotenv(BASE_DIR / ".env")
-
-from app import create_app
-from extensions import db
-
-flask_app = create_app()
-
-# ---------------------------------------------------------------------------
-# MCP server
-# ---------------------------------------------------------------------------
-
 from mcp.server.fastmcp import FastMCP
 
-mcp = FastMCP("aquiestoy")
+mcp = FastMCP("aquiestoy", host="127.0.0.1", port=8765)
 
 # ---------------------------------------------------------------------------
-# Helpers
+# Lazy Flask init — loaded on first tool call, not at startup
 # ---------------------------------------------------------------------------
 
+_flask_app = None
 _TOOL_LOCK = threading.Lock()
+
+
+def _get_app():
+    global _flask_app
+    if _flask_app is None:
+        from dotenv import load_dotenv
+        load_dotenv(BASE_DIR / ".env")
+        from app import create_app
+        _flask_app = create_app()
+    return _flask_app
+
+
+def _db():
+    from extensions import db
+    return db
 
 
 def _db_tool(fn):
     @wraps(fn)
     def wrapped(*args, **kwargs):
         with _TOOL_LOCK:
-            with flask_app.app_context():
+            with _get_app().app_context():
                 return fn(*args, **kwargs)
     return wrapped
 
@@ -119,8 +114,8 @@ def crear_fuente(url: str = "", descripcion: str = "", imagen_hash: str = "") ->
             return json.dumps({"id": existing.id, "creada": False, "razon": "imagen duplicada"})
 
     f = Fuente(url=url or None, descripcion=descripcion or None, imagen_hash=imagen_hash or None)
-    db.session.add(f)
-    db.session.commit()
+    _db().session.add(f)
+    _db().session.commit()
     return json.dumps({"id": f.id, "creada": True})
 
 
@@ -142,6 +137,7 @@ def crear_persona(nombre: str, apellido: str, notas: str = "", fuente_id: int = 
     """
     from models import Persona, Fuente
 
+    db = _db()
     p = Persona(nombre=nombre, apellido=apellido, notas=notas or None)
     db.session.add(p)
     db.session.flush()
@@ -171,6 +167,7 @@ def agregar_fuente_a_persona(persona_id: int, fuente_id: int) -> str:
     """
     from models import Persona, Fuente
 
+    db = _db()
     p = db.session.get(Persona, persona_id)
     f = db.session.get(Fuente, fuente_id)
 
@@ -191,4 +188,8 @@ def agregar_fuente_a_persona(persona_id: int, fuente_id: int) -> str:
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    mcp.run()
+    import sys
+    if "--http" in sys.argv:
+        mcp.run(transport="streamable-http")
+    else:
+        mcp.run()

@@ -27,7 +27,7 @@ def parse_nombre_completo(nombre_completo):
     return "", ""
 
 def build_notas(loc_data):
-    """Construye campo notas con toda la info adicional"""
+    """Construye campo notas con info adicional (sin URL)"""
     notas_parts = []
 
     if loc_data.get('edad'):
@@ -41,10 +41,6 @@ def build_notas(loc_data):
 
     if loc_data.get('lugarNombre'):
         notas_parts.append(f"Hospital: {loc_data['lugarNombre']}")
-
-    # Agregar link a localizados
-    if loc_data.get('slug_localizados'):
-        notas_parts.append(f"Fuente: https://localizadosvenezuela.com/localizados/{loc_data['slug_localizados']}")
 
     return " | ".join(notas_parts) if notas_parts else ""
 
@@ -82,19 +78,6 @@ def fetch_all_localizados():
 
 def import_to_db(localizados):
     """Importa registros a la BD de Aquí Estoy"""
-    # Crear fuente para localizados
-    fuente = Fuente.query.filter_by(
-        url="https://localizadosvenezuela.com"
-    ).first()
-
-    if not fuente:
-        fuente = Fuente(
-            url="https://localizadosvenezuela.com",
-            descripcion="Registro colaborativo de personas localizadas - Sismo Venezuela 2026"
-        )
-        db.session.add(fuente)
-        db.session.flush()
-
     creadas = 0
     duplicadas = 0
 
@@ -116,11 +99,17 @@ def import_to_db(localizados):
             duplicadas += 1
             continue
 
-        # Crear notas con toda la info
-        notas = build_notas({
-            **loc_data,
-            'slug_localizados': loc_data['slug']
-        })
+        # Crear notas (sin URL)
+        notas = build_notas(loc_data)
+
+        # Fuente individual con URL específica de esta persona
+        url_persona = f"https://localizadosvenezuela.com/localizados/{loc_data['slug']}"
+        fuente_individual = Fuente(
+            url=url_persona,
+            descripcion="Localizados Venezuela"
+        )
+        db.session.add(fuente_individual)
+        db.session.flush()
 
         # Crear persona
         persona = Persona(
@@ -128,7 +117,7 @@ def import_to_db(localizados):
             apellido=apellido,
             notas=notas
         )
-        persona.fuentes.append(fuente)
+        persona.fuentes.append(fuente_individual)
         db.session.add(persona)
 
         creadas += 1
